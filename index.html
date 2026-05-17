@@ -182,6 +182,24 @@
 
         @keyframes iwFadeUp { from { opacity:.85; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
         .iw-landing .iw-reveal { animation: iwFadeUp .55s ease both; }
+
+        /* Landing custom logo transparan: hilangkan background wrapper hijau saat APP_LOGO dipakai */
+        .iw-brand-logo.has-custom-logo,
+        .iw-footer-logo.has-custom-logo {
+            background: transparent !important;
+            box-shadow: none !important;
+            border: 0 !important;
+        }
+
+        .iw-brand-logo.has-custom-logo img,
+        .iw-footer-logo.has-custom-logo img {
+            background: transparent !important;
+            box-shadow: none !important;
+            border: 0 !important;
+            border-radius: 0 !important;
+            object-fit: contain !important;
+        }
+
 </style>
 </head>
 <body class="pb-24 lg:pb-0 min-h-screen flex flex-col lg:flex-row font-sans">
@@ -706,14 +724,27 @@ function updateTutorialLinksInUI() {
  }
 
  function updateLogosInUI() {
+ const logoUrl = state.data.settings.APP_LOGO || "";
+ const hasCustomLogo = !!(logoUrl && logoUrl.trim() !== "" && logoUrl.startsWith("http"));
+
  const sidebarContainer = document.getElementById('sidebar-logo-container');
  if (sidebarContainer) sidebarContainer.innerHTML = renderLogo("w-10 h-10", "w-5 h-5");
+
  const lockscreenContainer = document.getElementById('lockscreen-logo-container');
  if (lockscreenContainer) lockscreenContainer.innerHTML = renderLogo("w-24 h-24", "w-10 h-10");
+
  const landingLogoContainer = document.getElementById('landing-logo-container');
- if (landingLogoContainer) landingLogoContainer.innerHTML = renderLogo("w-10 h-10", "w-5 h-5");
+ if (landingLogoContainer) {
+   landingLogoContainer.innerHTML = renderLogo("w-10 h-10", "w-5 h-5");
+   landingLogoContainer.classList.toggle("has-custom-logo", hasCustomLogo);
+ }
+
  const landingFooterLogoContainer = document.getElementById('landing-footer-logo-container');
- if (landingFooterLogoContainer) landingFooterLogoContainer.innerHTML = renderLogo("w-8 h-8", "w-4 h-4");
+ if (landingFooterLogoContainer) {
+   landingFooterLogoContainer.innerHTML = renderLogo("w-8 h-8", "w-4 h-4");
+   landingFooterLogoContainer.classList.toggle("has-custom-logo", hasCustomLogo);
+ }
+
  lucide.createIcons();
  }
 
