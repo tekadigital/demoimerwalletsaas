@@ -562,7 +562,7 @@
  let state = {
  view: 'home',
  data: JSON.parse(JSON.stringify(DUMMY_DATA)),
- isUsingDemo: true,
+ isUsingDemo: false,
  subTab: 'daily', // Sub-tabs: daily, calendar, yearly, budget
  isLoading: false,
  enteredPin: "",
@@ -1244,7 +1244,8 @@ function updateTutorialLinksInUI() {
  throw new Error("Gagal");
  }
  } catch (err) {
- showToast("PIN keamanan terkirim ke WhatsApp Anda (123456)!", "success");
+ console.error("Forgot PIN gagal:", err);
+ showToast("Gagal kirim PIN. Cek Apps Script URL / email / gateway.", "warn");
  }
  }
 
@@ -1261,26 +1262,23 @@ function updateTutorialLinksInUI() {
 
  async function verifyPin() {
  try {
- const response = await fetch(`${CONFIG.API_URL}?action=verifyPin&pin=${state.enteredPin}`);
+ const response = await fetchWithTimeout(`${CONFIG.API_URL}?action=verifyPin&pin=${state.enteredPin}`, { timeout: 15000 });
+ if (!response.ok) throw new Error("Koneksi verifikasi gagal.");
  const result = await response.json();
- 
+
  if (result && result.status === 'success') {
  document.getElementById('pin-lockscreen').classList.add('hidden');
  sessionStorage.setItem('authenticated_pin', 'true');
+ state.isUsingDemo = false;
  showToast("Sesi Verifikasi Keamanan Berhasil!", "success");
  fetchDashboardData();
  } else {
  triggerPinShake();
  }
  } catch (err) {
- if (state.enteredPin === "123456") {
- document.getElementById('pin-lockscreen').classList.add('hidden');
- sessionStorage.setItem('authenticated_pin', 'true');
- showToast("Sesi Demo Berhasil Terbuka!", "success");
- fetchDashboardData();
- } else {
+ console.error("Verifikasi PIN gagal:", err);
+ showToast("Tidak bisa terhubung ke backend. Cek Apps Script URL / deployment.", "warn");
  triggerPinShake();
- }
  }
  }
 
@@ -1409,13 +1407,13 @@ function updateTutorialLinksInUI() {
  let result = state.preloadedDashboard;
 
  if (!result) {
- const response = await fetchWithTimeout(`${CONFIG.API_URL}?action=getDashboard`, { timeout: 15000 });
+ const response = await fetchWithTimeout(`${CONFIG.API_URL}?action=getDashboard`, { timeout: 20000 });
  if (!response.ok) throw new Error("Koneksi gagal.");
  result = await response.json();
  } else {
  state.preloadedDashboard = null;
  }
- 
+
  if (result && result.status === 'success') {
  state.data = result;
  state.isUsingDemo = false;
@@ -1426,14 +1424,16 @@ function updateTutorialLinksInUI() {
  throw new Error("Format tidak sesuai.");
  }
  } catch (error) {
- console.warn("Database cloud tidak merespon. Menggunakan data lokal.");
- state.isUsingDemo = true;
+ console.error("Database cloud tidak merespon:", error);
+ state.isUsingDemo = false;
+ showToast("Gagal sinkron ke backend. Data demo tidak dipakai. Cek Apps Script URL.", "warn");
  } finally {
  state.isLoading = false;
  document.getElementById('global-loader')?.classList.add('hidden');
  render();
  updateLogosInUI();
  updateFooterInUI();
+ updateTutorialLinksInUI();
  }
  }
 
@@ -2599,6 +2599,14 @@ function updateTutorialLinksInUI() {
  // PIN tidak langsung difokuskan supaya landing page tetap terasa seperti home public.
  }
  };
- </script>
+ 
+        window.addEventListener("load", function() {
+            if (sessionStorage.getItem("authenticated_pin") === "true") {
+                state.isUsingDemo = false;
+                fetchDashboardData();
+            }
+        });
+
+</script>
 </body>
 </html>
