@@ -200,6 +200,139 @@
             object-fit: contain !important;
         }
 
+
+        /* ======================================================
+           DASHBOARD DARK MODE ONLY
+           Landing page tetap pakai desain aslinya.
+        ====================================================== */
+        body.dashboard-dark {
+            background: #020617 !important;
+            color: #e2e8f0 !important;
+        }
+
+        body.dashboard-dark > aside {
+            background: #020617 !important;
+            border-color: #1e293b !important;
+            color: #e2e8f0 !important;
+        }
+
+        body.dashboard-dark > main {
+            background:
+                radial-gradient(circle at 24% 0%, rgba(16, 185, 129, 0.12), transparent 28rem),
+                radial-gradient(circle at 80% 18%, rgba(6, 182, 212, 0.10), transparent 34rem),
+                linear-gradient(180deg, #020617 0%, #07111f 52%, #020617 100%) !important;
+            color: #e2e8f0 !important;
+            min-height: 100vh;
+        }
+
+        body.dashboard-dark #app {
+            background: transparent !important;
+            color: #e2e8f0 !important;
+        }
+
+        body.dashboard-dark #global-loader {
+            background: #020617 !important;
+        }
+
+        body.dashboard-dark #navbar {
+            background: rgba(2, 6, 23, 0.96) !important;
+            border-color: #1e293b !important;
+            color: #e2e8f0 !important;
+        }
+
+        body.dashboard-dark .card-shadow,
+        body.dashboard-dark .bottom-nav {
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35) !important;
+        }
+
+        body.dashboard-dark .bg-white,
+        body.dashboard-dark [class*="bg-white"] {
+            background-color: #0f172a !important;
+        }
+
+        body.dashboard-dark .bg-slate-50,
+        body.dashboard-dark [class*="bg-slate-50"],
+        body.dashboard-dark .bg-blue-50,
+        body.dashboard-dark [class*="bg-blue-50"],
+        body.dashboard-dark .bg-gray-50,
+        body.dashboard-dark [class*="bg-gray-50"] {
+            background-color: rgba(15, 23, 42, 0.72) !important;
+        }
+
+        body.dashboard-dark .bg-slate-100,
+        body.dashboard-dark [class*="bg-slate-100"],
+        body.dashboard-dark .bg-blue-100,
+        body.dashboard-dark [class*="bg-blue-100"] {
+            background-color: rgba(30, 41, 59, 0.82) !important;
+        }
+
+        body.dashboard-dark .border-slate-100,
+        body.dashboard-dark [class*="border-slate-100"],
+        body.dashboard-dark .border-slate-200,
+        body.dashboard-dark [class*="border-slate-200"],
+        body.dashboard-dark .border-blue-100,
+        body.dashboard-dark [class*="border-blue-100"] {
+            border-color: #1e293b !important;
+        }
+
+        body.dashboard-dark .text-slate-900,
+        body.dashboard-dark .text-slate-850,
+        body.dashboard-dark .text-gray-900,
+        body.dashboard-dark .text-black {
+            color: #f8fafc !important;
+        }
+
+        body.dashboard-dark .text-slate-700,
+        body.dashboard-dark .text-slate-600,
+        body.dashboard-dark .text-gray-600,
+        body.dashboard-dark .text-gray-700 {
+            color: #cbd5e1 !important;
+        }
+
+        body.dashboard-dark .text-slate-500,
+        body.dashboard-dark .text-slate-400,
+        body.dashboard-dark .text-gray-400,
+        body.dashboard-dark .text-gray-500 {
+            color: #94a3b8 !important;
+        }
+
+        body.dashboard-dark input,
+        body.dashboard-dark select,
+        body.dashboard-dark textarea {
+            background-color: #0b1220 !important;
+            border-color: #1e293b !important;
+            color: #e2e8f0 !important;
+        }
+
+        body.dashboard-dark input::placeholder,
+        body.dashboard-dark textarea::placeholder {
+            color: #64748b !important;
+        }
+
+        body.dashboard-dark .hover\:bg-slate-50:hover,
+        body.dashboard-dark .hover\:bg-rose-50:hover {
+            background-color: rgba(30, 41, 59, 0.70) !important;
+        }
+
+        body.dashboard-dark .dark-gradient-title {
+            background: linear-gradient(90deg, #34d399 0%, #22d3ee 55%, #60a5fa 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent !important;
+            -webkit-text-fill-color: transparent;
+        }
+
+        body.dashboard-dark .dashboard-theme-toggle {
+            border-color: rgba(34, 211, 238, 0.18) !important;
+            background: rgba(15, 23, 42, 0.88) !important;
+            color: #e2e8f0 !important;
+        }
+
+        body.dashboard-dark .dashboard-theme-toggle:hover {
+            background: rgba(30, 41, 59, 0.95) !important;
+            color: #67e8f9 !important;
+        }
+
 </style>
 </head>
 <body class="pb-24 lg:pb-0 min-h-screen flex flex-col lg:flex-row font-sans">
@@ -375,6 +508,10 @@
  <i data-lucide="book-open" class="w-5 h-5"></i>
  <span>Tutorial</span>
  </button>
+ <button onclick="toggleDashboardTheme()" id="side-theme-toggle" class="dashboard-theme-toggle w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl font-bold text-sm text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-all">
+ <i id="side-theme-icon" data-lucide="moon" class="w-5 h-5"></i>
+ <span id="side-theme-label">Dark Mode</span>
+ </button>
  
  <!-- Tombol Keluar Sesi Desktop -->
  <button onclick="logout()" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl font-bold text-sm text-rose-500 hover:bg-rose-50 transition-all mt-4">
@@ -446,6 +583,11 @@
  <span class="text-[9px] font-bold">Bot WA</span>
  </button>
  </nav>
+
+ <!-- Toggle Dark/Light Dashboard Mobile -->
+ <button onclick="toggleDashboardTheme()" id="mobile-theme-toggle" class="dashboard-theme-toggle fixed right-5 bottom-24 w-12 h-12 rounded-2xl bg-white border border-slate-100 text-slate-500 flex items-center justify-center z-50 lg:hidden shadow-xl transition-all">
+ <i id="mobile-theme-icon" data-lucide="moon" class="w-5 h-5"></i>
+ </button>
 
  <!-- Notifikasi Toast -->
  <div id="toast" class="fixed top-6 right-6 z-[120] bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-xl flex items-center gap-3 transition-all duration-300 translate-y-[-100px] opacity-0 pointer-events-none">
@@ -568,6 +710,56 @@
  enteredPin: "",
  preloadedDashboard: null
  };
+
+ // --- DASHBOARD DARK/LIGHT MODE ---
+ function getSavedDashboardTheme() {
+ try {
+ return localStorage.getItem("imerswallet_dashboard_theme") || "light";
+ } catch (e) {
+ return "light";
+ }
+ }
+
+ function applyDashboardTheme(theme, silent = true) {
+ const nextTheme = theme === "dark" ? "dark" : "light";
+ state.theme = nextTheme;
+
+ document.body.classList.toggle("dashboard-dark", nextTheme === "dark");
+
+ try {
+ localStorage.setItem("imerswallet_dashboard_theme", nextTheme);
+ } catch (e) {}
+
+ updateThemeButtons();
+
+ if (!silent) {
+ showToast(nextTheme === "dark" ? "Dark mode aktif." : "Light mode aktif.", "success");
+ }
+ }
+
+ function toggleDashboardTheme() {
+ applyDashboardTheme(state.theme === "dark" ? "light" : "dark", false);
+ }
+
+ function updateThemeButtons() {
+ const isDark = state.theme === "dark";
+ const iconName = isDark ? "sun" : "moon";
+ const label = isDark ? "Light Mode" : "Dark Mode";
+
+ const sideIcon = document.getElementById("side-theme-icon");
+ const sideLabel = document.getElementById("side-theme-label");
+ const mobileIcon = document.getElementById("mobile-theme-icon");
+
+ if (sideIcon) sideIcon.setAttribute("data-lucide", iconName);
+ if (sideLabel) sideLabel.textContent = label;
+ if (mobileIcon) mobileIcon.setAttribute("data-lucide", iconName);
+
+ if (typeof lucide !== "undefined") lucide.createIcons();
+ }
+
+ // Apply saved dashboard theme early. Landing tetap pakai style asli.
+ setTimeout(() => applyDashboardTheme(getSavedDashboardTheme(), true), 0);
+
 
  const formatIDR = (val) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(val);
 
@@ -1419,7 +1611,7 @@ function updateTutorialLinksInUI() {
  state.isUsingDemo = false;
  CONFIG.BOT_NUMBER = result.settings.BOT_NUMBER || CONFIG.BOT_NUMBER;
  applyBrandingSettings(result.settings || {});
- showToast("Pangkalan Data Sinkron Real-time!", "success");
+ showToast("Cloud Sinkron Aktif!", "success");
  } else {
  throw new Error("Format tidak sesuai.");
  }
@@ -1442,16 +1634,42 @@ function updateTutorialLinksInUI() {
  const stats = state.data.stats;
  const activeWallets = getActiveWallets();
 
- const getGreeting = () => {
+ const getGreetingMeta = () => {
  const hour = new Date().getHours();
- if (hour < 11) return "Selamat Pagi";
- if (hour < 15) return "Selamat Siang";
- if (hour < 19) return "Selamat Sore";
- return "Selamat Malam";
+
+ if (hour < 11) {
+ return {
+ text: "Selamat Pagi",
+ icon: "☀️",
+ quote: "Mulai hari dengan catatan kecil, biar keputusan uang makin besar hasilnya."
+ };
+ }
+
+ if (hour < 15) {
+ return {
+ text: "Selamat Siang",
+ icon: "💼",
+ quote: "Cek arus kas sebentar hari ini, supaya dompet tetap terkendali sampai nanti."
+ };
+ }
+
+ if (hour < 19) {
+ return {
+ text: "Selamat Sore",
+ icon: "🌤️",
+ quote: "Review pengeluaran hari ini. Hemat kecil yang konsisten bisa jadi saldo besar."
+ };
+ }
+
+ return {
+ text: "Selamat Malam",
+ icon: "🌙",
+ quote: "Tutup hari dengan finansial yang rapi, biar besok jalan lebih tenang."
+ };
  };
 
  const userName = state.isUsingDemo ? "Demo User" : (state.data.userName || "Owner iMersWallet");
- const greeting = getGreeting();
+ const greetingMeta = getGreetingMeta();
 
  const walletCards = activeWallets.map((w, idx) => {
  const icons = ["user", "briefcase", "piggy-bank", "wallet", "landmark", "vault"];
@@ -1501,13 +1719,14 @@ function updateTutorialLinksInUI() {
  <i data-lucide="user" class="w-6 h-6"></i>
  </div>
  <div>
- <p class="text-xs font-semibold text-slate-400">${greeting}</p>
+ <p class="text-xs font-semibold text-slate-400">${safeHtml(greetingMeta.text)} <span class="ml-1">${greetingMeta.icon}</span></p>
  <h3 class="text-lg font-bold text-slate-850">${safeHtml(userName)}</h3>
+ <p class="text-xs font-semibold text-slate-400 mt-1 max-w-xl">${safeHtml(greetingMeta.quote)}</p>
  </div>
  </div>
  <div class="flex items-center gap-2 px-3 py-1.5 bg-blue-50/50 rounded-xl">
  <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
- <span class="text-xs font-bold text-slate-500">Pangkalan Data Terhubung</span>
+ <span class="text-xs font-bold text-slate-500">Cloud Sinkron Aktif</span>
  </div>
  </div>
  `;
@@ -1519,8 +1738,8 @@ function updateTutorialLinksInUI() {
 
  <div class="flex justify-between items-center">
  <div>
- <p class="text-xs font-extrabold text-slate-400 uppercase tracking-widest mb-1">DANA DOMPET SAYA</p>
- <h2 class="text-2xl font-black text-slate-900">Ringkasan Finansial 👋</h2>
+ <p class="text-xs font-extrabold text-slate-400 uppercase tracking-widest mb-1">DANA DOMPET ${safeHtml(userName)}</p>
+ <h2 class="dark-gradient-title text-2xl font-black text-slate-900">Snapshot Keuangan 👋</h2>
  </div>
  <div class="flex gap-2">
  <button onclick="fetchDashboardData()" class="w-12 h-12 bg-white rounded-2xl border border-slate-100 flex items-center justify-center text-slate-500 hover:text-dana hover:bg-slate-50 card-shadow transition-all" title="Refresh Data">
@@ -1563,7 +1782,7 @@ function updateTutorialLinksInUI() {
 
  <div class="space-y-3">
  <div class="flex justify-between items-center">
- <h3 class="text-sm font-extrabold text-slate-400 uppercase tracking-wider">Kantong Alokasi Aktif</h3>
+ <h3 class="text-sm font-extrabold text-slate-400 uppercase tracking-wider">Dompet Alokasi Aktif</h3>
  <button onclick="router('profile')" class="text-xs text-dana font-bold hover:underline">Atur Dompet</button>
  </div>
  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -2305,6 +2524,7 @@ function updateTutorialLinksInUI() {
  }
  lucide.createIcons();
  updateFooterInUI();
+ updateThemeButtons();
  }
 
  // --- GRAFIK APEXCHARTS ---
