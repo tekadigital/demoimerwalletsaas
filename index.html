@@ -1688,7 +1688,7 @@
             { phone: "628123456789", wallet: "Pribadi", category: "Belanja", monthlyLimit: 2000000, active: true }
         ];
         DUMMY_DATA.users = [
-            { userId: "USR-999", phone: "628123456789", name: "Terry Katar", role: "Admin", email: "owner@example.com", active: true, canChatBot: true, canReceiveReport: true, defaultWallet: "Pribadi" }
+            { userId: "USR-999", phone: "628123456789", name: "Demo User", role: "Admin", email: "owner@example.com", active: true, canChatBot: true, canReceiveReport: true, defaultWallet: "Pribadi" }
         ];
         DUMMY_DATA.reportRecipients = DUMMY_DATA.users.filter(u => u.canReceiveReport);
         DUMMY_DATA.settings.ENABLE_BUDGET = "TRUE";
@@ -2536,7 +2536,7 @@
                 return "Selamat Malam";
             };
 
-            const userName = state.isUsingDemo ? "Terry Katar" : (state.data.userName || "Terry Katar");
+            const userName = state.isUsingDemo ? "Demo User" : (state.data.userName || "Owner iMersWallet");
             const greeting = getGreeting();
 
             const walletCards = activeWallets.map((w, idx) => {
