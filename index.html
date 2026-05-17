@@ -193,13 +193,13 @@
         <header class="iw-nav"><div class="iw-wrap"><div class="iw-nav-in">
             <a href="#iw-home" class="iw-brand"><div id="landing-logo-container" class="iw-brand-logo"><i class="fa-solid fa-wallet"></i></div><span>iMers<b>Wallet</b></span></a>
             <nav class="iw-links">
-                <a href="#iw-home">Home</a><a href="#iw-features">Fitur</a><a href="#iw-how">Cara Kerja</a><a href="#iw-simulation">Simulasi</a><a href="#iw-pricing">Harga</a><a id="landing-tutorial-link" href="#" target="_self">Tutorial</a><a href="#iw-faq">FAQ</a>
+                <a href="#iw-home">Home</a><a href="#iw-features">Fitur</a><a href="#iw-how">Cara Kerja</a><a href="#iw-simulation">Simulasi</a><a href="#iw-pricing">Harga</a><a href="#iw-faq">FAQ</a>
             </nav>
             <div class="iw-actions"><a href="#iw-simulation" class="iw-linkbtn">Coba Simulasi</a><button type="button" onclick="showPinLogin()" class="iw-btn iw-btn-ghost">Login</button><a href="#" class="iw-btn iw-btn-primary"><i class="fa-solid fa-bolt"></i> Coba Gratis</a></div>
             <button type="button" id="iw-mobile-toggle" class="iw-mobile-toggle"><i class="fa-solid fa-bars"></i></button>
         </div>
         <div class="iw-mobile-menu" id="iw-mobile-menu">
-            <a href="#iw-home" class="iw-btn iw-btn-ghost iw-mobile-link">Home</a><a href="#iw-features" class="iw-btn iw-btn-ghost iw-mobile-link">Fitur</a><a href="#iw-how" class="iw-btn iw-btn-ghost iw-mobile-link">Cara Kerja</a><a href="#iw-simulation" class="iw-btn iw-btn-ghost iw-mobile-link">Simulasi</a><a href="#iw-pricing" class="iw-btn iw-btn-ghost iw-mobile-link">Harga</a><a id="landing-tutorial-link-mobile" href="#" target="_self" class="iw-btn iw-btn-ghost iw-mobile-link">Tutorial</a><button type="button" onclick="showPinLogin()" class="iw-btn iw-btn-ghost iw-mobile-link">Login</button><a href="#" class="iw-btn iw-btn-primary iw-mobile-link"><i class="fa-solid fa-bolt"></i> Coba Gratis</a>
+            <a href="#iw-home" class="iw-btn iw-btn-ghost iw-mobile-link">Home</a><a href="#iw-features" class="iw-btn iw-btn-ghost iw-mobile-link">Fitur</a><a href="#iw-how" class="iw-btn iw-btn-ghost iw-mobile-link">Cara Kerja</a><a href="#iw-simulation" class="iw-btn iw-btn-ghost iw-mobile-link">Simulasi</a><a href="#iw-pricing" class="iw-btn iw-btn-ghost iw-mobile-link">Harga</a><button type="button" onclick="showPinLogin()" class="iw-btn iw-btn-ghost iw-mobile-link">Login</button><a href="#" class="iw-btn iw-btn-primary iw-mobile-link"><i class="fa-solid fa-bolt"></i> Coba Gratis</a>
         </div></div></header>
 
         <main>
@@ -353,6 +353,10 @@
  <i data-lucide="user" class="w-5 h-5"></i>
  <span>Bot WA & Pengaturan</span>
  </button>
+ <button onclick="openDashboardTutorial()" id="side-tutorial" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl font-bold text-sm text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-all">
+ <i data-lucide="book-open" class="w-5 h-5"></i>
+ <span>Tutorial</span>
+ </button>
  
  <!-- Tombol Keluar Sesi Desktop -->
  <button onclick="logout()" class="w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl font-bold text-sm text-rose-500 hover:bg-rose-50 transition-all mt-4">
@@ -414,6 +418,10 @@
  <button onclick="router('analytics')" id="nav-analytics" class="flex flex-col items-center gap-1 text-gray-400">
  <i data-lucide="pie-chart" class="w-6 h-6"></i>
  <span class="text-[9px] font-bold">Analisis</span>
+ </button>
+ <button onclick="openDashboardTutorial()" id="nav-tutorial" class="flex flex-col items-center gap-1 text-gray-400">
+ <i data-lucide="book-open" class="w-6 h-6"></i>
+ <span class="text-[9px] font-bold">Tutorial</span>
  </button>
  <button onclick="router('profile')" id="nav-profile" class="flex flex-col items-center gap-1 text-gray-400">
  <i data-lucide="user" class="w-6 h-6"></i>
@@ -608,7 +616,34 @@
  return state.data.settings?.TUTORIAL_LINK || localStorage.getItem('imerswallet_tutorial_link') || "#";
  }
 
- function updateTutorialLinksInUI() {
+ 
+        function openDashboardTutorial() {
+            let url = getTutorialLink();
+
+            if (!url || url.trim() === "" || url.trim() === "#") {
+                showToast("Link tutorial belum diatur admin.", "warning");
+                return;
+            }
+
+            url = url.trim();
+
+            // Support link umum: https://, http://, mailto:, tel:, whatsapp:, dan link relative/hash.
+            const isSafeProtocol =
+                /^https?:\/\//i.test(url) ||
+                /^mailto:/i.test(url) ||
+                /^tel:/i.test(url) ||
+                /^whatsapp:/i.test(url) ||
+                url.startsWith("#") ||
+                url.startsWith("/");
+
+            if (!isSafeProtocol) {
+                url = "https://" + url;
+            }
+
+            window.open(url, "_blank", "noopener,noreferrer");
+        }
+
+function updateTutorialLinksInUI() {
  const url = getTutorialLink() || "#";
  const isBlank = !url || url === "#";
  const ids = ["landing-tutorial-link", "landing-tutorial-link-mobile"];
@@ -1820,7 +1855,7 @@
  <div>
  <label class="text-[10px] font-black text-slate-400 uppercase tracking-wider block mb-2">Link Tutorial</label>
  <input type="text" id="cfg-tutorial-link" value="${safeHtml(settings.TUTORIAL_LINK || '#')}" placeholder="https://youtube.com/... / Google Drive / WhatsApp Group / komunitas" class="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl text-xs outline-none focus:border-dana font-mono">
- <p class="text-[9px] text-slate-400 mt-1 font-semibold">Dipakai untuk menu Tutorial di landing page. Bisa isi YouTube, Google Drive, WhatsApp Group, komunitas, atau biarkan #.</p>
+ <p class="text-[9px] text-slate-400 mt-1 font-semibold">Dipakai untuk menu Tutorial di dashboard setelah user login. Hanya admin yang mengatur link ini. Bisa isi YouTube, Google Drive, grup komunitas, atau biarkan #.</p>
  </div>
  <div>
  <label class="text-[10px] font-black text-slate-400 uppercase tracking-wider block mb-2">PIN Kemasukan Baru (6 Digit)</label>
