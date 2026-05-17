@@ -758,21 +758,11 @@
  }
 
  function switchBilling(billingType) {
-            // Pricing versi terbaru hanya memakai satu kartu lifetime.
+            // Pricing versi WA only sekarang hanya satu kartu lifetime.
             return true;
-        } else {
- btnMonthly.classList.add('bg-brand-primary', 'text-brand-darker');
- btnMonthly.classList.remove('text-slate-400');
- btnAnnually.classList.remove('bg-brand-primary', 'text-brand-darker');
- btnAnnually.classList.add('text-slate-400');
+        }
 
- pricePersonal.textContent = "Rp 49K";
- priceBusiness.textContent = "Rp 99K";
- price.textContent = "Rp 199K";
- }
- }
-
- function initLandingCharts() {
+        function initLandingCharts() {
  if (typeof Chart === 'undefined') return;
  const ctxCashflowEl = document.getElementById('cashflowChart');
  const ctxCategoryEl = document.getElementById('categoryChart');
@@ -1068,7 +1058,12 @@
         }
 
 
- // --- PUBLIC LANDING PAGE CONTROLS ---
+ 
+        // Expose simulasi landing ke window agar inline onclick selalu jalan.
+        window.iwLandingSimulate = iwLandingSimulate;
+        window.iwLandingReset = iwLandingReset;
+
+        // --- PUBLIC LANDING PAGE CONTROLS ---
  function scrollToLandingSection(id) {
  const el = document.getElementById(id);
  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
